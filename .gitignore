@@ -102,6 +102,6 @@ ENV/
 
 
 *test.py
-token
+config.py
 .vscode/
 .idea/
