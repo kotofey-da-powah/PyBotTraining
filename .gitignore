@@ -100,6 +100,8 @@ ENV/
 # mypy
 .mypy_cache/
 
+
 *test.py
-token
+config.py
 .vscode/
+.idea/
