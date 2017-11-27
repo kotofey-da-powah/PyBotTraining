@@ -11,7 +11,7 @@ from telegram.error import NetworkError, Unauthorized
 from time import sleep
 
 from config import telegramToken
-
+from vkFeedParser import get_post
 
 update_id = None
 
@@ -29,7 +29,7 @@ def main():
     except IndexError:
         update_id = None
 
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=u'mylog.log')
 
     while True:
         try:
@@ -48,9 +48,18 @@ def echo(bot):
     for update in bot.get_updates(offset=update_id, timeout=10):
         update_id = update.update_id + 1
 
-        if update.message:  # your bot can receive updates without messages
+        if update.message.text:  # your bot can receive updates without messages
             # Reply to the message
-            update.message.reply_text(update.message.text)
+            text = update.message.text
+            if text == '/start':
+                update.message.reply_text(
+                    'Привет!\nНапиши мне /getrandompost чтобы получить случайный пост посвященный Python.')
+            elif text == '/getrandompost':
+                update.message.reply_text(get_post())
+            else:
+                update.message.reply_text(
+                    'Напиши мне /getrandompost чтобы получить случайный пост посвященный Python.')
+
 
 
 if __name__ == '__main__':
