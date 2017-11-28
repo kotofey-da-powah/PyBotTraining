@@ -11,7 +11,7 @@ from telegram.error import NetworkError, Unauthorized
 from time import sleep
 
 from config import telegramToken
-from vkFeedParser import get_post
+from vkFeedParser import get_random_post
 
 update_id = None
 
@@ -19,18 +19,15 @@ update_id = None
 def main():
     """Run the bot."""
     global update_id
-    # Telegram Bot Authorization Token
     bot = telegram.Bot(telegramToken)
 
-    # get the first pending update_id, this is so we can skip over it in case
-    # we get an "Unauthorized" exception.
     try:
         update_id = bot.get_updates()[0].update_id
     except IndexError:
         update_id = None
 
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=u'mylog.log')
-
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    print('Bot is alive!')
     while True:
         try:
             echo(bot)
@@ -55,12 +52,16 @@ def echo(bot):
                 update.message.reply_text(
                     'Привет!\nНапиши мне /getrandompost чтобы получить случайный пост посвященный Python.')
             elif text == '/getrandompost':
-                update.message.reply_text(get_post())
+                update.message.reply_text(parse_post(get_random_post()))
             else:
                 update.message.reply_text(
                     'Напиши мне /getrandompost чтобы получить случайный пост посвященный Python.')
 
-
+def parse_post(post):
+    text = post['text']
+    title = text[0:text.find('\n')]
+    msg = '{}\n\nЧитать далее...\n{}'.format(title,post['url'])
+    return msg
 
 if __name__ == '__main__':
     main()
