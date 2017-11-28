@@ -1,4 +1,5 @@
 from pprint import pprint
+import random
 
 import vk_api
 
@@ -7,20 +8,20 @@ import json_serializer
 
 
 def get_updates():
-    MAX_COUNT = 50
+    MAX_COUNT = 200
     session = vk_api.VkApi(token=vkToken)
     api = session.get_api()
     response = api.newsfeed.search(q='#python', count=MAX_COUNT)
     posts = list(response['items'])
-    # while 'next_from' in response:
-    #    response = api.newsfeed.search(
-    #        q='#python', count=MAX_COUNT, start_from=response['next_from'])
-    #    posts += response['items']
+    while 'next_from' in response:
+        response = api.newsfeed.search(
+            q='#python', count=MAX_COUNT, start_from=response['next_from'])
+        posts += response['items']
     return posts
 
 
 def build_list(raw_list):
-    MIN_LIKES = 250
+    MIN_LIKES = 500
 
     wet_list = []
     url_pattern = 'https://vk.com/wall'  # .../wall+from_id+id
@@ -55,12 +56,22 @@ def check_simil(original_list, lists_to_write):
     return clear_list
 
 
-def get_post():
-    return 'рандомный пост мать его'
+def update():
+    try:
+        write_to_json(build_list((get_updates())))
+    except FileNotFoundError:
+        print('No posts.json file found, run posts_init.py')
+
+
+def get_random_post():
+    posts = json_serializer.get_decoded_json('posts')
+    rnd = random.randint(0, len(posts) - 1)
+    return posts[rnd]
 
 
 def main():
-    write_to_json(build_list((get_updates())))
+    if input('For update type (up): ') == 'up':
+        update()
 
 
 if __name__ == '__main__':

@@ -105,3 +105,4 @@ ENV/
 config.py
 .vscode/
 .idea/
+posts.json
