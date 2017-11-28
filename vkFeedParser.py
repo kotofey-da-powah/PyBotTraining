@@ -41,8 +41,18 @@ def build_list(raw_list):
 
 def write_to_json(post_list):
     pres_posts = json_serializer.get_decoded_json('posts')
-    new_posts = pres_posts + post_list
-    json_serializer.encode_json('posts',new_posts)
+    clear = check_simil(pres_posts, post_list)
+    new_posts = pres_posts + clear
+    json_serializer.encode_json('posts', new_posts)
+
+
+def check_simil(original_list, lists_to_write):
+    clear_list = []
+    for writing_post in lists_to_write:
+        originaд_texts = [or_post['text'] for or_post in original_list]
+        if not(writing_post['text'] in originaд_texts):
+            clear_list += [writing_post]
+    return clear_list
 
 
 def get_post():
