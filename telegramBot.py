@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Simple Bot to reply to Telegram messages.
-This is built on the API wrapper, see echobot2.py to see the same example built
-on the telegram.ext bot framework.
-This program is dedicated to the public domain under the CC0 license.
-"""
+"""Simple Bot to get random VK post about Python"""
 import logging
 import telegram
 from telegram.error import NetworkError, Unauthorized
@@ -45,19 +41,19 @@ def echo(bot):
     for update in bot.get_updates(offset=update_id, timeout=10):
         update_id = update.update_id + 1
 
-        if update.message.text:  # your bot can receive updates without messages
-            # Reply to the message
+        if update.message.text:
+            #reply
             text = update.message.text
-            if text == '/start':
+            if text == '/start':                           #init message
                 update.message.reply_text(
                     'Привет!\nНапиши мне /getrandompost чтобы получить случайный пост посвященный Python.')
-            elif text == '/getrandompost':
+            elif text == '/getrandompost':                 #command response
                 update.message.reply_text(parse_post(get_random_post()))
-            else:
+            else:                                          #error message
                 update.message.reply_text(
                     'Напиши мне /getrandompost чтобы получить случайный пост посвященный Python.')
 
-def parse_post(post):
+def parse_post(post):           #building message function
     text = post['text']
     title = text[0:text.find('\n')]
     msg = '{}\n\nЧитать далее...\n{}'.format(title,post['url'])
