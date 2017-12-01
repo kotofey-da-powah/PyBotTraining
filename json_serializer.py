@@ -9,4 +9,4 @@ def get_decoded_json(name):
 
 def encode_json(name, dictionary):
     with open('{}.json'.format(name), 'w') as file:
-        json.dump(dictionary, file, ensure_ascii=False)
+        json.dump(dictionary, file)  #ensure_ascii=False)
