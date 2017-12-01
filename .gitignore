@@ -104,5 +104,6 @@ ENV/
 *test.py
 config.py
 posts.json
+posts_backup.json
 .vscode/
 .idea/

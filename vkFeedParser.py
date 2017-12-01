@@ -65,20 +65,12 @@ def check_simil(original_list, lists_to_write):
 def update():
     try:
         write_to_json(build_list((get_updates())))
+        return 0
     except FileNotFoundError:    #error for not existing posts.json
-        print('No posts.json file found, run posts_init.py')
+        return 'No posts.json file found, run posts_init.py'
 
 
 def get_random_post():
     posts = json_serializer.get_decoded_json('posts')
     rnd = random.randint(0, len(posts) - 1)
     return posts[rnd]
-
-
-def main():
-    if input('For update type (up): ') == 'up':
-        update()
-
-
-if __name__ == '__main__':
-    main()
